@@ -10,7 +10,8 @@ This module provides functionality to:
 import os
 from typing import Optional, Dict, Any, Tuple
 from web3 import Web3
-from web3.middleware import geth_poa_middleware
+from web3.middleware import ExtraDataToPOAMiddleware
+
 from eth_account import Account
 from eth_account.signers.local import LocalAccount
 import json
@@ -113,7 +114,7 @@ class BlockchainConnector:
         self.w3 = Web3(Web3.HTTPProvider(rpc_url))
 
         # Add PoA middleware for networks like Polygon, BSC
-        self.w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+        self.w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
 
         if not self.w3.is_connected():
             raise ConnectionError(f"Failed to connect to {rpc_url}")
